@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-export const login = () => localStorage.setItem("logged", true);
+export const subscribe = () => localStorage.setItem("logged", true);
 
 export const returnRoute = (
   { name, path, component, exact, redirect, from, to },

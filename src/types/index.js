@@ -28,7 +28,23 @@ export type GifData = {
 };
 
 export type DashboardState = {
-  gifs: GifData,
+  gifs: Array<GifModel>,
   searchQuery: string,
   error: string
+};
+
+export type GifProps = {
+  url: string,
+  width: string,
+  height: string,
+  title: string
+};
+
+export type SearchFormProps = {
+  onClick: () => void,
+  handleChange: () => void
+};
+
+export type GifContainerProps = {
+  gifs: Array<GifModel>
 };
