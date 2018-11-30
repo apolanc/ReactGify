@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 
 import { Navbar, SearchForm } from "../components";
+import GifContainer from "./GifContainer";
 import type { DashboardState } from "../../../types";
 import giphyService from "../../../giphyService";
 
@@ -9,10 +10,10 @@ export default class Dashboard extends Component<any, DashboardState> {
   constructor() {
     super();
     this.state = {
-      // eslint-disable-next-line react/no-unused-state
-      gifs: {
-        data: []
-      },
+      gifs: [],
+      offset: 0,
+      limit: 18,
+      hasMore: true,
       searchQuery: "",
       error: ""
     };
@@ -21,30 +22,55 @@ export default class Dashboard extends Component<any, DashboardState> {
     this.onSearchFormChanged = this.onSearchFormChanged.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    window.onscroll = () => {
+      const { hasMore, searchQuery } = this.state;
 
-  async onSearchClick(e) {
-    e.preventDefault();
-    const { searchQuery } = this.state;
+      if (!hasMore) return;
 
-    try {
-      const gifs = await giphyService({ searchQuery });
-      this.setState({ gifs });
-    } catch (error) {
-      this.setState({ error });
-    }
+      if (
+        window.innerHeight + document.documentElement.scrollTop ===
+        document.documentElement.offsetHeight
+      ) {
+        this.getGifs(searchQuery);
+      }
+    };
   }
 
-  onSearchFormChanged(e) {
+  onSearchClick(e: { target: { name: string, value: any } }) {
+    e.preventDefault();
+    this.getGifs();
+  }
+
+  onSearchFormChanged(e: { target: { name: string, value: any } }) {
     const {
       target: { value: searchQuery }
     } = e;
     this.setState({
-      searchQuery
+      searchQuery,
+      gifs: []
     });
   }
 
+  async getGifs() {
+    const { searchQuery, limit, offset } = this.state;
+
+    try {
+      const { data: gfs } = await giphyService({ searchQuery, limit, offset });
+
+      this.setState(prevState => ({
+        gifs: [...prevState.gifs, ...gfs],
+        offset: prevState.offset + limit
+      }));
+    } catch (error) {
+      this.setState({ error });
+      throw Error("No gifs founds");
+    }
+  }
+
   render() {
+    const { gifs, error } = this.state;
+
     return (
       <div className="wrapper">
         <div className="main-panel">
@@ -53,9 +79,12 @@ export default class Dashboard extends Component<any, DashboardState> {
             onClick={this.onSearchClick}
             handleChange={this.onSearchFormChanged}
           />
-          <div className="content">
-            <p>Im the content</p>
-          </div>
+          {error && <p>{error}</p>}
+          {!!gifs.length && (
+            <div className="content">
+              <GifContainer gifs={gifs} />
+            </div>
+          )}
         </div>
       </div>
     );

@@ -75,3 +75,19 @@
   padding: 30px 15px;
   min-height: calc(100% - 123px);
 }
+
+.gif {
+  border: 1px solid lightcoral;
+  display: flex;
+  justify-content: center;
+  height: 280px;
+  width: 280px;
+  padding: 12px;
+  border-radius: 5px;
+  background-color: lightcoral;
+  margin-bottom: 25px;
+}
+
+.gif:hover {
+  cursor: pointer;
+}

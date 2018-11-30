@@ -11,10 +11,10 @@ export default async ({
   rating = RATING,
   lang = LANG
 }) => {
-  const { data } = await baseUrl
+  const { data, pagination } = await baseUrl
     .get(
       `search?api_key=${GIPHY_API_KEY}&q=${searchQuery}&limit=${limit}&offset=${offset}&rating=${rating}&lang=${lang}`
     )
     .json();
-  return data;
+  return { data, pagination };
 };
