@@ -15,6 +15,20 @@ const gifContainerStyle = {
   transition: `opacity ${duration}ms`
 };
 
+const loadingStyle = {
+  marginLeft: "50%",
+  marginRight: "50%",
+  marginTop: "10%",
+  position: "absolute"
+};
+
+const loaderTransitions = {
+  entering: { opacity: 0 },
+  entered: { opacity: 1 },
+  exiting: { opacity: 1 },
+  exited: { opacity: 0, display: "none" }
+};
+
 const gifContainerTransitions = {
   entering: { opacity: 0 },
   entered: { opacity: 1 },
@@ -30,7 +44,8 @@ export default class Dashboard extends Component<any, DashboardState> {
       offset: 0,
       limit: 12,
       searchQuery: "",
-      error: ""
+      error: "",
+      loading: false
     };
 
     this.onSearchClick = this.onSearchClick.bind(this);
@@ -45,7 +60,7 @@ export default class Dashboard extends Component<any, DashboardState> {
 
   onSearchClick(e: { target: { name: string, value: any } }) {
     e.preventDefault();
-    this.setState({ gifs: [] });
+    this.setState({ gifs: [], loading: true });
     this.getGifs();
   }
 
@@ -67,7 +82,8 @@ export default class Dashboard extends Component<any, DashboardState> {
 
       this.setState(prevState => ({
         gifs: [...prevState.gifs, ...gfs],
-        offset: prevState.offset + limit
+        offset: prevState.offset + limit,
+        loading: false
       }));
     } catch (error) {
       this.setState({ error });
@@ -76,7 +92,7 @@ export default class Dashboard extends Component<any, DashboardState> {
   }, 500);
 
   render() {
-    const { gifs, error } = this.state;
+    const { gifs, error, loading } = this.state;
     const show = gifs.length > 0;
 
     return (
@@ -88,6 +104,18 @@ export default class Dashboard extends Component<any, DashboardState> {
             handleChange={this.onSearchFormChanged}
           />
           {error && <p>{error}</p>}
+          <Transition in={loading} timeout={duration}>
+            {state => (
+              <div
+                style={{
+                  ...loadingStyle,
+                  ...gifContainerStyle,
+                  ...loaderTransitions[state]
+                }}
+                className="fa fa-spinner fa-spin fa-5x"
+              />
+            )}
+          </Transition>
           <Transition in={show} timeout={duration}>
             {state => (
               <div
