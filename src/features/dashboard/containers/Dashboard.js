@@ -1,10 +1,26 @@
 // @flow
 import React, { Component } from "react";
+import { Transition } from "react-transition-group";
+import { debounce } from "lodash";
 
 import { Navbar, SearchForm } from "../components";
 import GifContainer from "./GifContainer";
 import type { DashboardState } from "../../../types";
 import giphyService from "../../../giphyService";
+import { onScrollEvent } from "../../../utils";
+
+const duration = 1000;
+
+const gifContainerStyle = {
+  transition: `opacity ${duration}ms`
+};
+
+const gifContainerTransitions = {
+  entering: { opacity: 0 },
+  entered: { opacity: 1 },
+  exiting: { opacity: 1 },
+  exited: { opacity: 0 }
+};
 
 export default class Dashboard extends Component<any, DashboardState> {
   constructor() {
@@ -12,8 +28,7 @@ export default class Dashboard extends Component<any, DashboardState> {
     this.state = {
       gifs: [],
       offset: 0,
-      limit: 18,
-      hasMore: true,
+      limit: 12,
       searchQuery: "",
       error: ""
     };
@@ -23,22 +38,14 @@ export default class Dashboard extends Component<any, DashboardState> {
   }
 
   componentDidMount() {
-    window.onscroll = () => {
-      const { hasMore, searchQuery } = this.state;
-
-      if (!hasMore) return;
-
-      if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
-      ) {
-        this.getGifs(searchQuery);
-      }
-    };
+    onScrollEvent(this.getGifs, fn => {
+      fn.call(this);
+    });
   }
 
   onSearchClick(e: { target: { name: string, value: any } }) {
     e.preventDefault();
+    this.setState({ gifs: [] });
     this.getGifs();
   }
 
@@ -46,13 +53,13 @@ export default class Dashboard extends Component<any, DashboardState> {
     const {
       target: { value: searchQuery }
     } = e;
+
     this.setState({
-      searchQuery,
-      gifs: []
+      searchQuery
     });
   }
 
-  async getGifs() {
+  getGifs = debounce(async () => {
     const { searchQuery, limit, offset } = this.state;
 
     try {
@@ -66,10 +73,11 @@ export default class Dashboard extends Component<any, DashboardState> {
       this.setState({ error });
       throw Error("No gifs founds");
     }
-  }
+  }, 500);
 
   render() {
     const { gifs, error } = this.state;
+    const show = gifs.length > 0;
 
     return (
       <div className="wrapper">
@@ -80,11 +88,19 @@ export default class Dashboard extends Component<any, DashboardState> {
             handleChange={this.onSearchFormChanged}
           />
           {error && <p>{error}</p>}
-          {!!gifs.length && (
-            <div className="content">
-              <GifContainer gifs={gifs} />
-            </div>
-          )}
+          <Transition in={show} timeout={duration}>
+            {state => (
+              <div
+                style={{
+                  ...gifContainerStyle,
+                  ...gifContainerTransitions[state]
+                }}
+                className="content"
+              >
+                <GifContainer gifs={gifs} />
+              </div>
+            )}
+          </Transition>
         </div>
       </div>
     );

@@ -4,6 +4,17 @@ import PropTypes from "prop-types";
 
 export const subscribe = () => localStorage.setItem("logged", true);
 
+export function onScrollEvent(fn, cb) {
+  window.onscroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      cb(fn);
+    }
+  };
+}
+
 export const returnRoute = (
   { name, path, component, exact, redirect, from, to },
   key

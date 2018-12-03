@@ -72,19 +72,19 @@
 }
 
 .main-panel > .content {
-  padding: 30px 15px;
+  padding: 30px 15px 0px 125px;
   min-height: calc(100% - 123px);
 }
 
-.gif {
-  border: 1px solid lightcoral;
+.gif-container {
+  border: 1px solid #007dbc;
   display: flex;
   justify-content: center;
   height: 280px;
   width: 280px;
   padding: 12px;
   border-radius: 5px;
-  background-color: lightcoral;
+  background-color: transparent;
   margin-bottom: 25px;
 }
 

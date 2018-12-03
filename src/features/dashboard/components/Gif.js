@@ -8,7 +8,7 @@ const Gif = (props: GifProps) => {
 
   return (
     <Fragment>
-      <div className="gif">
+      <div className="gif-container">
         <img src={url} width={width} height={height} alt={title} />
       </div>
     </Fragment>
