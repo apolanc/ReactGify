@@ -72,7 +72,7 @@
 }
 
 .main-panel > .content {
-  padding: 30px 15px 0px 125px;
+  padding: 30px 15px 0px;
   min-height: calc(100% - 123px);
 }
 
@@ -88,6 +88,6 @@
   margin-bottom: 25px;
 }
 
-.gif:hover {
+.gif-container:hover {
   cursor: pointer;
 }

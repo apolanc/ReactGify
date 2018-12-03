@@ -26,7 +26,7 @@ const loaderTransitions = {
   entering: { opacity: 0 },
   entered: { opacity: 1 },
   exiting: { opacity: 1 },
-  exited: { opacity: 0, display: "none" }
+  exited: { opacity: 0 }
 };
 
 const gifContainerTransitions = {
@@ -42,7 +42,7 @@ export default class Dashboard extends Component<any, DashboardState> {
     this.state = {
       gifs: [],
       offset: 0,
-      limit: 12,
+      limit: 18,
       searchQuery: "",
       error: "",
       loading: false
@@ -60,8 +60,7 @@ export default class Dashboard extends Component<any, DashboardState> {
 
   onSearchClick(e: { target: { name: string, value: any } }) {
     e.preventDefault();
-    this.setState({ gifs: [], loading: true });
-    this.getGifs();
+    this.setState({ gifs: [], loading: true }, () => this.getGifs());
   }
 
   onSearchFormChanged(e: { target: { name: string, value: any } }) {
@@ -89,11 +88,11 @@ export default class Dashboard extends Component<any, DashboardState> {
       this.setState({ error });
       throw Error("No gifs founds");
     }
-  }, 500);
+  }, 0);
 
   render() {
     const { gifs, error, loading } = this.state;
-    const show = gifs.length > 0;
+    const show = gifs.length > 0 && !loading;
 
     return (
       <div className="wrapper">

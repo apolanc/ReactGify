@@ -8,7 +8,7 @@ const Row = ({ children }: Array<node> | node): JSX.Element => (
 );
 
 const Col = ({ children }: Array<node> | node): JSX.Element => (
-  <div className="col-lg-3">{children}</div>
+  <div className="col-lg-2">{children}</div>
 );
 
 export default class GifContainer extends Component<any, GifContainerProps> {
@@ -35,7 +35,7 @@ export default class GifContainer extends Component<any, GifContainerProps> {
                 id,
                 title,
                 images: {
-                  original: { url }
+                  original_still: { url }
                 }
               } = gif;
               return (
