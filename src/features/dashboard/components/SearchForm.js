@@ -12,7 +12,7 @@ const SearchForm = (props: SearchFormProps) => {
         <div className="input-group">
           <input
             className="form-control"
-            placeholder="Search GIF!"
+            placeholder="Search Image!"
             onChange={e => handleChange(e)}
           />
           <div className="input-group-append">

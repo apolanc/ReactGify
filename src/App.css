@@ -72,11 +72,11 @@
 }
 
 .main-panel > .content {
-  padding: 30px 15px 0px 125px;
+  padding: 30px 15px 0px;
   min-height: calc(100% - 123px);
 }
 
-.gif-container {
+.image-container {
   border: 1px solid #007dbc;
   display: flex;
   justify-content: center;
@@ -88,6 +88,66 @@
   margin-bottom: 25px;
 }
 
-.gif:hover {
+.image-container:hover {
   cursor: pointer;
+}
+
+/* Slider */
+
+.slider {
+  position: relative;
+  width: 465px;
+  margin: 0 auto;
+  height: 500px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.slider-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.slide {
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+}
+
+.arrow {
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform ease-in 0.1s;
+}
+
+.arrow:focus {
+  outline: none;
+}
+
+.nextArrow {
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  z-index: 999;
+  color: #fff;
+}
+
+.backArrow {
+  position: absolute;
+  top: 50%;
+  left: 25px;
+  z-index: 999;
+  color: #fff;
+}
+
+.fa-arrow-right:before,
+.fa-arrow-left:before {
+  color: #222;
 }
