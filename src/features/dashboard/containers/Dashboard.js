@@ -4,14 +4,14 @@ import { Transition } from "react-transition-group";
 import { debounce } from "lodash";
 
 import { Navbar, SearchForm } from "../components";
-import GifContainer from "./GifContainer";
+import { ImageContainer } from "../../image-handler/containers";
 import type { DashboardState } from "../../../types";
 import giphyService from "../../../giphyService";
 import { onScrollEvent } from "../../../utils";
 
 const duration = 1000;
 
-const gifContainerStyle = {
+const imageContainerStyle = {
   transition: `opacity ${duration}ms`
 };
 
@@ -29,18 +29,18 @@ const loaderTransitions = {
   exited: { opacity: 0 }
 };
 
-const gifContainerTransitions = {
+const imageContainerTransitions = {
   entering: { opacity: 0 },
   entered: { opacity: 1 },
   exiting: { opacity: 1 },
-  exited: { opacity: 0 }
+  exited: { opacity: 0, display: "none" }
 };
 
 export default class Dashboard extends Component<any, DashboardState> {
   constructor() {
     super();
     this.state = {
-      gifs: [],
+      images: [],
       offset: 0,
       limit: 18,
       searchQuery: "",
@@ -53,14 +53,14 @@ export default class Dashboard extends Component<any, DashboardState> {
   }
 
   componentDidMount() {
-    onScrollEvent(this.getGifs, fn => {
+    onScrollEvent(this.getImages, fn => {
       fn.call(this);
     });
   }
 
   onSearchClick(e: { target: { name: string, value: any } }) {
     e.preventDefault();
-    this.setState({ gifs: [], loading: true }, () => this.getGifs());
+    this.setState({ images: [], loading: true }, () => this.getImages());
   }
 
   onSearchFormChanged(e: { target: { name: string, value: any } }) {
@@ -73,26 +73,26 @@ export default class Dashboard extends Component<any, DashboardState> {
     });
   }
 
-  getGifs = debounce(async () => {
+  getImages = debounce(async () => {
     const { searchQuery, limit, offset } = this.state;
 
     try {
-      const { data: gfs } = await giphyService({ searchQuery, limit, offset });
+      const { data: imgs } = await giphyService({ searchQuery, limit, offset });
 
       this.setState(prevState => ({
-        gifs: [...prevState.gifs, ...gfs],
+        images: [...prevState.images, ...imgs],
         offset: prevState.offset + limit,
         loading: false
       }));
     } catch (error) {
       this.setState({ error });
-      throw Error("No gifs founds");
+      throw Error("No images founds");
     }
   }, 0);
 
   render() {
-    const { gifs, error, loading } = this.state;
-    const show = gifs.length > 0 && !loading;
+    const { images, error, loading } = this.state;
+    const show = images.length > 0 && !loading;
 
     return (
       <div className="wrapper">
@@ -108,7 +108,7 @@ export default class Dashboard extends Component<any, DashboardState> {
               <div
                 style={{
                   ...loadingStyle,
-                  ...gifContainerStyle,
+                  ...imageContainerStyle,
                   ...loaderTransitions[state]
                 }}
                 className="fa fa-spinner fa-spin fa-5x"
@@ -119,12 +119,12 @@ export default class Dashboard extends Component<any, DashboardState> {
             {state => (
               <div
                 style={{
-                  ...gifContainerStyle,
-                  ...gifContainerTransitions[state]
+                  ...imageContainerStyle,
+                  ...imageContainerTransitions[state]
                 }}
                 className="content"
               >
-                <GifContainer gifs={gifs} />
+                <ImageContainer images={images} />
               </div>
             )}
           </Transition>

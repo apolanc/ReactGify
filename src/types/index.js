@@ -1,6 +1,6 @@
 // @flow
 
-export type GifModel = {
+export type ImageModel = {
   type: string,
   id: string,
   slug: string,
@@ -23,21 +23,22 @@ export type GifModel = {
   analytics: {}
 };
 
-export type GifData = {
-  data: Array<GifModel>
+export type ImageData = {
+  data: Array<ImageModel>
 };
 
 export type DashboardState = {
-  gifs: Array<GifModel>,
+  images: Array<ImageModel>,
   searchQuery: string,
   error: string
 };
 
-export type GifProps = {
+export type ImageProps = {
   url: string,
   width: string,
   height: string,
-  title: string
+  title: string,
+  onImageClick: () => void
 };
 
 export type SearchFormProps = {
@@ -45,6 +46,6 @@ export type SearchFormProps = {
   handleChange: () => void
 };
 
-export type GifContainerProps = {
-  gifs: Array<GifModel>
+export type ImageContainerProps = {
+  images: Array<ImageModel>
 };
