@@ -77,14 +77,6 @@
 }
 
 .image-container {
-  border: 1px solid #007dbc;
-  display: flex;
-  justify-content: center;
-  height: 280px;
-  width: 280px;
-  padding: 12px;
-  border-radius: 5px;
-  background-color: transparent;
   margin-bottom: 25px;
 }
 

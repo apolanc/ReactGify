@@ -11,7 +11,7 @@ const Row = ({ children }: Array<node> | node): JSX.Element => (
 );
 
 const Col = ({ children }: Array<node> | node): JSX.Element => (
-  <div className="col-lg-2">{children}</div>
+  <div className="col-lg-2 col-md-3 col-sm-4 col-4">{children}</div>
 );
 
 export default class ImageContainer extends Component<

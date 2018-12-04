@@ -9,7 +9,7 @@ const Image = (props: ImageProps) => {
   return (
     <Fragment>
       <div
-        className="image-container"
+        className="image-container img-thumbnail"
         onKeyDown={() => null}
         role="button"
         onClick={() => onImageClick()}
